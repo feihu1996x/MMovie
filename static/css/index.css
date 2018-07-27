@@ -1,0 +1,19 @@
+body {
+    padding-top: 5px;
+    background-color: black;
+    color: white;
+}
+.starter-template {
+    padding: 20px 15px;
+    text-align: center;
+}
+.page-header{
+    text-align: center;
+}
+img{
+    display: inline-block;
+    margin: 0 auto;
+}
+.banner{
+    margin-bottom: 50px;
+}
