@@ -1,0 +1,43 @@
+/*顶部图片*/
+.top-image-block{
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: #18D7D7;
+}
+.top-image-block>img{
+	width: 160px;
+	height: 240px;
+	vertical-align: top;
+}
+
+/*影人描述*/
+.cast-desc{
+	padding: 15px;
+}
+
+/*代表作品*/
+.works{
+	padding-left: 15px;
+	margin-bottom: 5px;
+}
+.works+div{
+	overflow-x: auto;
+	white-space: nowrap;
+	padding-left: 15px;
+}
+.works-item{
+	display: inline-block;
+}
+.works-item>img{
+	width: 70px;
+	height: 100px;
+	margin-right: 10px;
+}
+.works-item>div{
+	width: 70px;
+	text-align: center;
+}
+.works-item>div:nth-child(2){
+	line-height: 15px;
+}

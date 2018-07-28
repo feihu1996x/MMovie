@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>电影详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/movie-detail.css"/>
+	</head>
+
+	<body>
+		<!-- 标题 -->
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">电影</h1>
+		</header>
+		
+		<!--主体-->
+		<div class="mui-content" id="movie">
+			<!-- 顶部图片 -->
+			<div class="top-image-block">
+				<img :src="data.cover" alt=""/>
+			</div>
+			
+			<!-- 电影描述 -->
+			<div class="movie-desc">
+				<div class="movie-desc-left">
+					<span class="dark-big">{{ data.title }}</span>
+					<span class="gray-small">{{ data.year }} / {{ data.genres }}</span>
+					<span class="gray-small">{{ data.directors }}导演作品</span>
+				</div>
+				<div class="movie-desc-right">
+					<span class="gray-micro">豆瓣评分</span>
+					<span class="dark-big" v-if="data.score>0">{{ data.score }}</span>
+					<span class="dark-medium" v-else>暂无评分</span>
+					<span class="gray-small">{{ data.ratings_count }}人</span>
+				</div>
+			</div>
+			
+			<!-- 分隔线 -->
+			<div class="line-between"></div>
+			
+			<!--剧情简介-->
+			<p class="gray-small synopsis">剧情简介</p>
+			<p class="dark-medium mui-ellipsis-4">
+				{{ data.summary }}
+			</p>
+			
+			<!--演员-->
+			<p class="gray-small actors">演员</p>
+			<div>
+				<div v-for="item in data.casts" @click="item.id?open_cast_detail(item):mui.toast('没有找到该演员的信息奥~')">
+					<img :src="item.avatars?item.avatars.large:''"/>
+					<div class="dark-micro mui-ellipsis">{{ item.name }}</div>
+				</div>
+			</div>
+			
+			<!--评论-->
+			<p class="dark-medium comments">评论</p>
+			<ul class="mui-table-view">
+			    <li class="mui-table-view-cell">
+			    	<img src="../images/logo.png" class="comment-head-shot mui-pull-left"/>
+			    	<div>
+			    		<span class="dark-medium">Hello,World</span>
+			    		<span class="gray-medium">2018-7-26</span>
+			    	</div>
+			    	<p class="dark-medium">
+			    		这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！这部电影非常棒！
+			    	</p>
+			    </li>
+			    
+			    <li class="mui-table-view-cell">
+			    	<img src="../images/logo.png" class="comment-head-shot mui-pull-left"/>
+			    	<div>
+			    		<span class="dark-medium">Hello,World</span>
+			    		<span class="gray-medium">2018-7-26</span>
+			    	</div>
+			    	<p class="dark-medium">
+			    		这部电影非常棒！
+			    	</p>
+			    </li>
+			    
+			    <li class="mui-table-view-cell">
+			    	<img src="../images/logo.png" class="comment-head-shot mui-pull-left"/>
+			    	<div>
+			    		<span class="dark-medium">Hello,World</span>
+			    		<span class="gray-medium">2018-7-26</span>
+			    	</div>
+			    	<p class="dark-medium">
+			    		这部电影非常棒！
+			    	</p>
+			    </li>
+			    
+			    <li class="mui-table-view-cell">
+			    	<img src="../images/logo.png" class="comment-head-shot mui-pull-left"/>
+			    	<div>
+			    		<span class="dark-medium">Hello,World</span>
+			    		<span class="gray-medium">2018-7-26</span>
+			    	</div>
+			    	<p class="dark-medium">
+			    		这部电影非常棒！
+			    	</p>
+			    </li>			    
+			</ul>
+			
+		</div>
+	
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function(){
+				// 监听movieId事件
+				window.addEventListener("movieId", function(event){
+					var id = event.detail.id;
+					
+					// 显示加载动画效果
+					plus.nativeUI.showWaiting('数据加载中...', {
+						width: "100px",
+						height: "100px"
+					});
+					
+					// 监听当前webview的hide事件
+					var self = plus.webview.currentWebview();
+					self.addEventListener('hide', function(e){
+						window.scrollTo(0, 0);  // 将页面回滚至顶部
+						movie.reset_data();  // 重置电影详情数据
+//						console.log("数据重置"+movie.data.cover);
+					}, false)
+					
+					// 根据id请求电影详情数据
+					mui.getJSON('https://api.douban.com/v2/movie/subject/'+id, function(res){						
+						directors = ''
+						for(var i=0;i<res.directors.length;i++){
+							directors += res.directors[i].name;
+							if (i!=res.directors.length-1){
+								directors += '/'
+							}
+						}
+						// 获取接口数据
+						movie.data.title = res.title
+						movie.data.year = res.year
+						movie.data.genres = res.genres.join('/')
+						movie.data.directors = directors
+						movie.data.summary = res.summary
+						movie.data.casts = res.casts
+						movie.data.score = res.rating.average
+						movie.data.ratings_count = res.wish_count
+						movie.data.countries = res.countries.join('/')
+						movie.data.cover = res.images.large
+//						console.log("数据加载"+movie.data.cover)
+						plus.nativeUI.closeWaiting();  // 关闭加载动画
+					});
+				});				
+			})
+			
+			// 默认数据
+			function get_default_data(){
+				return {
+					cover: '',
+					title: '',
+					year: '',
+					genres: '',
+					directors: '',
+					summary: '',
+					casts: [],
+					score: '',
+					ratings_count: '',
+					countries: ''
+				}
+			}
+			
+			// vue实例
+			var movie = new Vue({
+				el: '#movie',
+				data: {
+					data: get_default_data()
+				},
+				methods: {
+					reset_data: function(){ // 重置数据
+						this.data = get_default_data()
+					},
+					open_cast_detail: function(item){  // 打开演员详情页面
+						mui.openWindow({
+							url: 'casts-detail.html',
+							id: 'casts-detail',
+							extras: {
+								cast_id: item.id
+							}
+						});
+					}
+				}
+			});
+			
+		</script>
+	</body>
+
+</html>

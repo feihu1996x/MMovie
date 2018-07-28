@@ -1,0 +1,14 @@
+html, body, .mui-content{
+	background: white;
+}
+
+.about{
+	padding: 15px;
+	margin-top: 50px;
+}
+
+.time{
+	padding: 15px;
+	float: right;
+	margin-top: 10px;
+}

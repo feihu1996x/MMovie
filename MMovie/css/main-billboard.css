@@ -1,0 +1,59 @@
+html,
+body {
+	background-color: white;
+}
+
+.mui-content{
+	background-color: white;
+}
+
+/*轮播图*/
+.banner-img{
+	width: 400px;
+	height: 120px;
+}
+
+/*top250、北美票房榜入口*/
+.group{
+	display: flex;
+	flex-flow: row nowrap;
+	flex: 1 1 0;
+	height: 200px;
+	text-align: center;
+}
+.item{
+	width: 50%;
+	height: 100%;
+	padding: 15px;
+}
+.billboard{
+	width: 100%;
+	height: 100%;
+	line-height: 100%;
+	border-radius: 5px;
+	display: table;
+}
+.billboard-title{
+	color: white;
+	font-size: 18px;
+	display: table-cell;
+	vertical-align: middle;
+}
+.item:nth-child(1)>.billboard{
+	background: -webkit-linear-gradient(#941AE6, #F1E0FC);
+	background: linear-gradient(#941AE6, #F1E0FC);
+}
+.item:nth-child(2)>.billboard{
+	background: -webkit-linear-gradient(#3370CC, #CEE1FD);
+	background: linear-gradient(#3370CC, #CEE1FD);
+}
+
+/*即将上映*/
+.coming_soon{
+	margin-left: 15px;
+}
+.coming_soon+ul>li>img{
+	width: 60px;
+	height: 90px;
+	margin-right: 10px;
+}

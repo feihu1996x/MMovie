@@ -1,0 +1,139 @@
+.mui-bar-nav {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.mui-content{
+	background: white;
+}
+
+.mui-ellipsis-4
+{
+    display: -webkit-box;
+    overflow: hidden;
+
+    white-space: normal !important;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+
+    -webkit-line-clamp: 4; /* 显示4行 */
+    -webkit-box-orient: vertical;
+}
+
+/*顶部图片*/
+.top-image-block{
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: #3C3C3C;
+}
+.top-image-block>img{
+	width: 160px;
+	height: 240px;
+	vertical-align: top;
+}
+
+/*电影描述*/
+.movie-desc {
+	padding: 15px;
+	height: 90px;
+}
+.movie-desc-left{
+	float: left;
+}
+.movie-desc-left>span:nth-child(1){
+	display: block;
+}
+.movie-desc-left>span:nth-child(3){
+	display: block;
+}
+.movie-desc-right{
+	width: 60px;
+	height: 60px;
+	background-color: white;
+	float: right;
+	text-align: center;
+	box-shadow: 0px 0px 10px #AAAAAA;	
+}
+.movie-desc-right>span:nth-child(1){
+	display: block;
+	vertical-align: middle;
+	margin-top: 5px;
+	line-height: 15px;
+}
+.movie-desc-right>span:nth-child(2){
+	display: block;
+	line-height: 20px;
+}
+.movie-desc-right>span:nth-child(3){
+	display: block;
+	line-height: 15px;
+}
+
+/*分隔线*/
+.line-between{
+	height: 0.5px;
+	background: #A2A2A2;
+	margin-left: 15px;
+}
+
+/*剧情简介*/
+.synopsis, .actors{
+	margin: 10px 0px 0px 15px;
+}
+p.synopsis + p{
+	margin: 0px 15px 0px 15px;
+}
+
+/*演员*/
+.actors+div{
+	margin-top: 5px;
+	overflow-x: auto;
+	white-space: nowrap;
+	padding-left: 15px;
+}
+.actors+div>div{
+	display: inline-block;
+}
+.actors+div>div>img{
+	width: 70px;
+	height: 100px;
+	margin-right: 10px;
+}
+.actors+div>div>img+div{
+	width: 70px;
+	text-align: center;
+}
+
+/*评论*/
+p.comments{
+	margin-top: 10px;
+	text-align: center;
+	background: #E6E6E6;
+	line-height: 40px;
+}
+img.comment-head-shot{
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
+}
+p.comments+.mui-table-view{
+	background-color: #EFEFF4;
+}
+p.comments+.mui-table-view::before{
+	height: 0px;
+}
+img.comment-head-shot+div>span:nth-child(1){
+	line-height: 30px;
+	text-align: center;
+	margin-left: 10px;
+}
+img.comment-head-shot+div>span:nth-child(2){
+	line-height: 30px;
+	text-align: center;
+	float: right;	
+}
+img.comment-head-shot+div+p{
+	margin-top: 5px;
+	margin-left: 40px;
+}

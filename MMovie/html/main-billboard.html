@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>榜单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/main-billboard.css"/>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <h1 class="mui-title">榜单</h1>
+		</header>
+		
+		<div class="mui-content" id="billboard">
+			<!--轮播图-->
+			<div id="slider" class="mui-slider" >
+			  <div class="mui-slider-group mui-slider-loop">
+			    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+			    <div class="mui-slider-item mui-slider-item-duplicate">
+			      <a href="#">
+			        <img :src="banner_last.subject.images.medium" class="banner-img">
+			      </a>
+			    </div>
+			    <!-- 第一张 -->
+			    <div class="mui-slider-item" v-for="banner in banners">
+			      <a href="#">
+			        <img :src="banner.subject.images.medium" class="banner-img">
+			      </a>
+			    </div>
+			    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+			    <div class="mui-slider-item mui-slider-item-duplicate">
+			      <a href="#">
+			        <img :src="banner_first.subject.images.medium" class="banner-img">
+			      </a>
+			    </div>
+			  </div>
+			  <div class="mui-slider-indicator">
+			    <div class="mui-indicator mui-active"></div>
+			    <div class="mui-indicator"></div>
+			    <div class="mui-indicator"></div>
+			  </div>
+			</div>
+			
+			<!--top250、北美票房榜入口-->
+			<div class="group">
+				<div class="item">
+					<div class="billboard" @click="open_billboard('top250')">
+						<span class="billboard-title">
+							豆瓣Top250
+						</span>
+					</div>
+				</div>
+				<div class="item">
+					<div class="billboard" @click="open_billboard('us_box')">
+						<span class="billboard-title">
+							北美票房榜
+						</span>						
+					</div>					
+				</div>
+			</div>
+			
+			<!--即将上映-->
+			<div class="coming_soon dark-medium">
+				即将上映
+			</div>
+			<ul class="mui-table-view">
+			    <li class="mui-table-view-cell" v-for="item in comming_soons">
+			        <img :src="item.cover" alt="" class="mui-pull-left"/>
+			        <div>
+			        	<div class="dark-big mui-ellipsis">{{ item.title }}</div>
+			        	<div>
+			        		<span class="gray-small mui-ellipsis"></span>&nbsp;
+			        		<span class="orange-small" v-if="item.score>0">{{ item.score }}分</span>
+			        		<span class="orange-small" v-else>暂无评分</span>
+			        	</div>
+ 						<div class="gray-small mui-ellipsis">导演：{{ item.directors }}</div>
+ 						<div class="gray-small mui-ellipsis">主演：{{ item.casts }}</div>
+			        </div>
+			        <button type="button" class="mui-btn mui-btn-warning mui-btn-outlined">想看</button>
+			    </li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/vue.min.js"></script>
+		<script>
+			mui.init({});
+			
+//			mui('.mui-slider').slider({
+//				interval: 3000, // 默认是0，单位毫秒
+//			});
+			
+			mui.plusReady(function(){				
+				// 获取banner数据
+				mui.getJSON('https://api.douban.com/v2/movie/us_box', function(res){
+					billboard.banners = res.subjects.slice(0, 3);
+					billboard.banner_first = billboard.banners[0];
+					billboard.banner_last = billboard.banners[billboard.banners.length-1];
+				});				
+				
+				// 获取即将上映数据
+				mui.getJSON('https://api.douban.com/v2/movie/coming_soon', function(res){
+					billboard.comming_soons = billboard.comming_soons.concat(convert(res.subjects));
+				}, false);
+			});
+			
+			// vue对象
+			var billboard = new Vue({
+				el: '#billboard',
+				data: {
+					banners: [],
+					banner_first: {
+						subject: {
+							images: {
+								medium: ''
+							}
+						}
+					},
+					banner_last: {
+						subject: {
+							images: {
+								medium: ''
+							}
+						}						
+					},
+					comming_soons: []
+				},
+				methods: {
+					open_billboard: function (cate){
+						mui.openWindow({
+							url: cate+'.html',
+							id: cate,
+							waiting:{
+								autoShow:true,
+								title: '正在加载...'
+							}
+						});
+					}
+				}
+			});
+			// 接口数据转换函数
+			function convert(items){
+				var newItems = [];
+				items.forEach(function(item){
+					var genres = item.genres.join('/');
+					var directors = '';
+					for(var i=0;i<item.directors.length;i++){
+						directors += item.directors[i].name;
+						if(i != item.directors.length - 1){
+							directors += '/';
+						}
+					}
+					var casts = '';
+					for(var i=0;i<item.casts.length;i++){
+						casts += item.casts[i].name;
+						if(i != item.casts.length - 1){
+							casts += '/';
+						}
+					}
+					newItems.push({
+						id: item.id,
+						title: item.title,
+						genres: genres,
+						cover: item.images.large,
+						score: item.rating.average,
+						directors: directors,
+						casts: casts
+					});				
+				});
+				return newItems;
+			}		
+		</script>
+	</body>
+
+</html>

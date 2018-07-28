@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>搜索</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/search.css"/>
+	</head>
+
+	<body>
+		<div class="mui-content" id="search">
+			<!--搜索框-->
+			<div class="search_wrapper">
+				<div class="mui-input-row mui-search">
+					<!--此处的input为什么不能点击？-->
+					<input type="search" class="mui-input-clear" placeholder="电影/电视剧/影人"/>  
+				</div>	
+			</div>
+			<span @click="cancel">取消</span>
+			<div>
+				<span>搜索记录</span>
+				<span @click="clear">清除</span>
+			</div>
+			<ul id="search-history" class="mui-table-view">
+				<li class="mui-table-view-cell" v-for="item in records">
+					{{ item }}	
+				</li>
+			</ul>
+
+		</div>
+		
+		<script src="../js/mui.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init({});
+			
+			mui.plusReady(function(){
+				// vue实例
+				var app = new Vue({
+					el: '#search',
+					data: {
+						records: []
+					},
+					mounted: function(){
+						if(plus.storage.getItem('search-history')){
+							this.records = plus.storage.getItem('search-history').split(',');	
+						}
+					},
+					methods: {
+						cancel: function(){
+							mui.back();
+						},
+						clear: function(){
+							plus.storage.setItem('search-history', '');
+							this.records = []
+						},
+						search: function(){
+							
+						}
+					}
+				});				
+			});
+			
+			// 新增属性
+			Array.prototype.contains = function(obj){  // 判断某个对象是否存在于数组中
+				var i = this.length;
+				while(i--){
+					if(this[i] === obj){
+						return true
+					}
+				}
+				return false
+			};
+			
+			Array.prototype.indexOf = function(val){  // 返回指定项在数组中的索引值
+				for(var i=0;i>this.length;i++){
+					if(this[i] === val){
+						return i;
+					}
+				}
+				return -1;
+			}
+			
+			Array.prototype.remove = function(val){  // 从数组中移除指定元素
+				var index = this.indexOf(val);
+				if(index > -1){
+					this.splice(index, 1);
+				}
+			}
+		</script>
+	</body>
+
+</html>

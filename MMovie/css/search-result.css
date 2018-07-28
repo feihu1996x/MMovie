@@ -1,0 +1,9 @@
+/* 热映列表 */
+.mui-scroll-wrapper{
+	top: 50px;
+}
+.item-img{
+	width: 60px;
+	height: 90px;
+	margin-right: 10px;
+}

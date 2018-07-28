@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/us_box.css"/>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">北美票房榜</h1>
+		</header>
+		
+		<div class="mui-content" id="box">
+			<ul class="top-list">
+			    <li v-for="item in boxes" @click="open_detail(item)">
+			        <div>
+			            <div class="top-line"></div>
+			            <div class="top-index">{{ item.index }}</div>
+			            <div class="top-line"></div>
+			        </div>
+			        <div class="top-card">
+			            <img :src="item.cover" class="mui-pull-left"/>
+			            <div class="dark-big">{{ item.title }}</div>
+			            <div>
+			                <span class="gray-small">豆瓣评分：</span>
+			                <span class="orange-small">{{ item.score }}分</span>
+			            </div>
+			            <div class="gray-small mui-ellipsis">
+			            	导演：{{ item.directors }}
+			            </div>
+			            <div class="gray-small mui-ellipsis">
+			            	演员：{{ item.casts }}
+			            </div>			        			
+			        </div>
+			        <div class="dark-medium">票房{{ item.box/10000 }}万美元</div>
+			    </li>			        	
+			</ul>			
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init();		
+			
+			mui.plusReady(function(){
+				detail_page = plus.webview.getWebviewById('movie-detail');
+				if (!detail_page){
+					detailPage = mui.preload({
+						id: "movie-detail",
+						url: "html/movie-detail.html"
+					})					
+				}
+				
+				// 请求数据
+				get_data();			
+			});
+
+			// 获取接口数据的方法
+			function get_data(start){
+			    plus.nativeUI.showWaiting('加载中...', {
+			        width: "100px",
+			        height: "100px"
+			    });
+			    mui.getJSON('https://api.douban.com/v2/movie/us_box', {
+			    	
+			    }, function(res){
+			        app.boxes = convert(res);
+			        plus.nativeUI.closeWaiting();
+			    });
+			}
+			
+			var app = new Vue({
+				el: '#box',
+				data: {
+					boxes: [],
+				},
+				methods: {
+					open_detail: function(item){
+						mui.fire(detail_page, 'movieId', {  // 触发电影详情页面自定义事件并传递参数
+							id: item.id
+						});
+						detail_page.show('slide-in-right');  // 打开电影详情页面
+					}
+				}
+			});
+			
+			function convert(obj){
+				var items = obj.subjects;
+				
+				var newItems = [];
+				
+				for(var j=0;j<items.length;j++){
+					item = items[j];
+					var directors = '';
+					for(var i=0;i<item.subject.directors.length;i++){
+						directors += item.subject.directors[i].name;
+						if (i != item.subject.directors.length - 1){
+							directors += '/';
+						}
+					}
+					var casts = '';
+					for(var i=0;i<item.subject.casts.length;i++){
+						casts += item.subject.casts[i].name;
+						if (i != item.subject.casts.length - 1){
+							casts += '/';
+						}
+					}
+					newItems.push({
+						directors: directors,
+						casts: casts,
+						index: j + 1,
+						id: item.subject.id,
+						title: item.subject.title,
+						cover: item.subject.images.medium,
+						score: item.subject.rating.average,
+						box: item.box
+					});
+				};
+				
+				return newItems;
+			}			
+		</script>
+	</body>
+
+</html>

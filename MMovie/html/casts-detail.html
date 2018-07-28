@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>影人</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/cast-detail.css"/>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">影人</h1>
+		</header>
+		
+		<div class="mui-content" id="cast">
+			<!--顶部图片-->
+			<div class="top-image-block">
+				<img :src="data.cover" alt=""/>
+			</div>
+			
+			<!--影人描述-->
+			<div class="cast-desc">
+				<div class="dark-big">
+					{{ data.name }}
+				</div>
+				<div class="gray-medium">
+					{{ data.name_en }}
+				</div>
+				<div class="gray-small">
+					个人简介
+				</div>
+				<div class="dark-medium">
+					{{ data.summary }}
+				</div>
+			</div>
+			
+			<!--代表作品-->
+			<div class="works gray-small">
+				代表作品
+			</div>
+			<div>
+				<div class="works-item" v-for="item in data.works">
+					<img :src="item.subject.images.medium"/>
+					<div class="dark-micro mui-ellipsis">
+						{{ item.subject.title }}
+					</div>
+					<div class="orange-small mui-ellipsis" v-if="item.subject.rating.average>0">
+						{{ item.subject.rating.average }}分
+					</div>
+					<div class="orange-small mui-ellipsis" v-else>
+						暂无评分
+					</div>					
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+//				console.log(self.cast_id);
+				
+				plus.nativeUI.showWaiting('加载中', {
+					width: '100px',
+					height: '100px'
+				})
+				
+				// 调用接口获取影人数据
+				mui.getJSON('https://api.douban.com/v2/movie/celebrity/'+self.cast_id, function(res){
+					cast.data.cover = res.avatars.large;
+					cast.data.name = res.name;
+					cast.data.name_en = res.name_en;
+					cast.data.summary = res.gender + ',' + res.born_place;
+					cast.data.works = res.works;
+					plus.nativeUI.closeWaiting();
+				});
+			});
+			
+			function get_default_data(){
+				return {
+					cover: '',
+					name: '',
+					name_en: '',
+					summary: '',
+					works: []
+				}
+			}
+			
+			// vue实例
+			var cast = new Vue({
+				el: '#cast',
+				data: {
+					data: get_default_data()
+				},
+				methods: {
+//					reset_data: function(){
+//						this.data = get_default_data();
+//					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

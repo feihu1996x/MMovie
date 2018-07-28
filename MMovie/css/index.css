@@ -1,0 +1,32 @@
+.mui-content{
+	background: white;
+}
+
+/* 顶部搜索框 */
+.wrap-search{
+	margin: 15px;
+	background: #E6E6E6;
+	height: 30px;
+	border-radius: 5px;
+	text-align: center;
+}
+.wrap-search>span:nth-child(1){
+	line-height: 30px;
+	color: #AAAAAA;
+	font-size: 16px;
+}
+.wrap-search>span:nth-child(2){
+	line-height: 30px;
+	color: #AAAAAA;
+	font-size: 14px;
+}
+
+/* 热映列表 */
+.mui-scroll-wrapper{
+	top: 50px;
+}
+.item-img{
+	width: 60px;
+	height: 90px;
+	margin-right: 10px;
+}
