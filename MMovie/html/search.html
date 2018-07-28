@@ -88,7 +88,7 @@
 			});
 			
 			mui.plusReady(function(){
-				if(plus.storage.getItem('history') !==''){
+				if(plus.storage.getItem('history')){
 					searchhistory.records = plus.storage.getItem('history').split(',');
 				}
 			})
