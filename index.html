@@ -14,11 +14,37 @@
             <div class="starter-template">
                 <h1>MMovie</h1>
                 <p class="lead">
-                    An Hybrid app built with the HTML, CSS and JavaScript <br>
-                    This project is just for demostration.
+                    仿豆瓣电影APP <br>
+                    基于MUI框架，使用HTML、CSS和JavaScript技术打造
                 </p>
                 <p class="lead">
-                        <a href="src/MMoviev1.apk" class="btn btn-lg btn-default">Download now</a>
+                    <a href="javascript:void()" class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal">Get It</a>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" 
+                                            aria-hidden="true">×
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        项目数据全部来自于豆瓣开放API，仅供演示
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    按下 ESC 按钮退出
+                                </div>
+                                <div class="modal-footer">
+                                    <!-- <button type="button" class="btn btn-default" 
+                                            data-dismiss="modal">关闭
+                                    </button> -->
+                                    <a href="src/MMoviev1.apk" type="button" class="btn btn-default">
+                                        立即下载
+                                    </a>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->  
                 </p>          
             </div>
         </div>    
