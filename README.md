@@ -2,7 +2,19 @@
 
 ## 项目描述
 
+仿豆瓣电影APP
+
 ## 技术栈
+
+HTML
+CSS
+JavaScipt
+MUI(高性能移动前端框架)
+Vue.js
+Node.js
+pm2(进程管理器)
+Docker(端口映射)
+Nginx(反向代理)
 
 ## Build And Setup
 
